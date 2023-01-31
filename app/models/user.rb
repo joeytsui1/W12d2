@@ -10,6 +10,12 @@ class User < ApplicationRecord
 
   before_validation :ensure_session_token
 
+  def reset_session_token!
+    self.session_token = generate_unique_session_token
+    self.save!
+    session_token
+  end
+
   private
 
   def self.find_by_credentials (credentials, password)
@@ -38,9 +44,4 @@ class User < ApplicationRecord
     self.session_token ||= generate_unique_session_token
   end
 
-  def reset_session_token!
-    self.session_token = generate_unique_session_token
-    self.save!
-    session_token
-  end
 end
